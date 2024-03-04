@@ -1,0 +1,118 @@
+
+.nepali-calendar{
+    width: 375px;
+    position: relative;
+}
+.nepali-calendar::after{
+    cursor: pointer;
+    content: "\1F4C5";
+    display: block;
+    position: absolute;
+    right: 0px;
+    top: 14px;
+    filter: grayscale(100%);
+    font-size: 18px;
+}
+.nepali-calendar::after:hover{
+    filter: grayscale(0%);
+    transition: 0.5s;
+}
+
+#calendar-nepali {
+    padding: 10px;
+    margin: 5px;
+    position: relative;
+    width: 100%;
+}
+input , input:focus{
+    box-shadow: 0 0 5px 0 #717171;
+    border: none;
+    outline: unset;
+    font-size: 16px;
+    color: #565656;
+}
+ .nepali-calendar:hover {
+    filter: grayscale(0);
+
+}
+.calendar-day{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 4px;
+    width: 100%;
+    padding: 5px;
+    font-weight: 700;
+    place-items: center;
+}
+
+ .calendar-body{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 4px;
+    width: 100%;
+
+}
+.calendar-container{
+    background-color: #f1efef;
+    padding: 5px;
+}
+.calendar{
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    border:1px solid #dfdfdf;
+    box-shadow: 0 0 5px 0 #dfdfdf;
+    width: 100%;
+    border-radius: 5px;
+    flex-direction: column;
+}
+.calendar-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0 ;
+}
+.action-button{
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    font-size: 28px;
+}
+
+.calendar-item{
+    cursor: pointer;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 32px;
+
+
+}
+.disabled{
+    background-color: #d5cfcfdd;
+    color: #ffff;
+    cursor: not-allowed;
+    border-radius: 5px;
+}
+.calendar-item.active{
+    background-color: hsl(0, 67%, 99%);
+    box-shadow: 0 0 5px 0 #717171;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+}
+.calendar-item:hover{
+    background-color: hsl(0, 67%, 99%);
+    box-shadow: 0 0 5px 0 #717171;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+}
+
