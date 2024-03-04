@@ -34,7 +34,6 @@ function generateCalendar(response) {
   const current = $("#calendar-nepali");
   const dateResponse = response;
   const date = dateResponse.monthdata;
-  console.log("data inside  ", date);
 
   removeCalendar();
   //add active class to the input field
@@ -54,21 +53,26 @@ function generateCalendar(response) {
       ) + 1
     : today_date.getMonth() + 1;
 
-  console.log("current_month", current_month);
-
   //create the body of the calendar
   function createBody() {
     var calendarBody = $("<div class='calendar-body'></div>").appendTo(
       container
     );
+    var selectedDate = $("#calendar-nepali").val();
     $.each(date, function (index, item) {
-      var isActive =
-        today == item.englishDate && selected_nepali_month == item.nepaliMonth;
-      console.log("isActive" + item.gate + "/" + item.nepaliMonth, isActive);
+      // var isActive =
+      //   today == item.englishDate && selected_nepali_month == item.nepaliMonth;
+      var itemDate =
+        item.year.toString() +
+        "/" +
+        item.nepaliMonth.toString() +
+        "/" +
+        item.gate.toString();
+      var isActive = selectedDate === itemDate;
       var calendarItem = $(
         `<div id='${item.dayid}' class="${item.active ? "" : "disabled"} ${
           isActive ? "active" : ""
-        }"}></div>`
+        }"}  style="color: ${item?.eventColour};"></div>`
       )
         .addClass("calendar-item")
         .html(`<div >${item.gate}</div>`)
@@ -80,18 +84,16 @@ function generateCalendar(response) {
         $(this).siblings().removeClass("active");
         //get the value of the clicked item
         var value = $(this).text();
-        console.log(value);
         //set the value of the input field
         $("#calendar-nepali").val(
           `${dateResponse.curYear}/${dateResponse.curMonth}/${value}`
         );
-        console.log(item.dayid);
+
         //remove the calendar container
         removeCalendar();
       });
     });
   }
-
   var activeMonth = dateConfig[dateResponse.curMonth];
   //create a div with calendar class to wrap calendar-header and calendar-container
   $(".calendar").remove();
@@ -102,7 +104,9 @@ function generateCalendar(response) {
   // create and show a container just below the input field
   $(
     `<div class='calendar-header'><div class='action-button' id='previous'>&laquo;</div>
-    <center>${activeMonth}</center><div class='action-button' id='next'>&raquo;</div></div></div>`
+    <div class="date-title">${
+      dateResponse.curYear + " " + activeMonth
+    }</div><div class='action-button' id='next'>&raquo;</div></div></div>`
   ).appendTo(wrapper);
   $(
     `<div class='calendar-day'><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thur</span><span>Fri</span><span>Sat</span></div>`
@@ -113,7 +117,6 @@ function generateCalendar(response) {
 
   //change active month on click of next and previous button
   $("#previous").on("click", function () {
-    console.log(dateResponse.prevMonth);
     getCalendarData(
       dateResponse.prevYear,
       dateResponse.prevMonth,
@@ -122,7 +125,6 @@ function generateCalendar(response) {
   });
 
   $("#next").on("click", function () {
-    console.log(dateResponse.nextMonth);
     getCalendarData(
       dateResponse.nextYear,
       dateResponse.nextMonth,
@@ -145,7 +147,6 @@ function createCalendar(response) {
   $("#calendar-nepali").on("focus", function () {
     const selected_nepali_year = $(this).val()?.split("/")[0];
     const selected_nepali_month = $(this).val()?.split("/")[1];
-    console.log("updated value", selected_nepali_year, selected_nepali_month);
     if (selected_nepali_month && selected_nepali_year) {
       return getCalendarData(
         selected_nepali_year,
