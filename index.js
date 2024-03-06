@@ -14,8 +14,9 @@ const dateConfig = {
 };
 
 function getCalendarData(year, month, callback) {
+  var url = window.location.origin.split("/")[2] || "kavre.nivid.app";
   $.ajax({
-    url: `https://kavre.nivid.app/dashboard/getMonthCalendarApi${
+    url: `https://${url}/dashboard/getMonthCalendarApi${
       year && month ? `?year=${year}&month=${month}` : ""
     }`,
     type: "GET",
