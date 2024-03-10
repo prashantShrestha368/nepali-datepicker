@@ -166,7 +166,7 @@ function createCalendar(response, that) {
   const selected_nepali_year = $(current).val()?.split("/")[0];
   const selected_nepali_month = $(current).val()?.split("/")[1];
   debugger
-  if (selected_nepali_month && selected_nepali_year) {
+  if (selected_nepali_month != response.curMonth || selected_nepali_year != response.curYear) {
     return getCalendarData(
       selected_nepali_year,
       selected_nepali_month,
