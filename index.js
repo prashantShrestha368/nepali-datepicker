@@ -12,68 +12,67 @@ const dateConfig = {
   11: "फागुन",
   12: "चैत",
 };
- let domain = "https://kavre.nivid.app";
+let domain = "https://kavre.nivid.app";
 
 const origin = location.origin;
 const liveUrlPattern =
   /^(https:\/\/[a-zA-Z0-9.-]+\.nivid\.app)$/;
 
-  if (liveUrlPattern.test(origin)) {
-    console.log('pass',origin.split(".")[1])
-    //slice out demo79 from the origin
+if (liveUrlPattern.test(origin)) {
+  console.log('pass', origin.split(".")[1])
+  //slice out demo79 from the origin
 
-    domain = origin.replace("https://kavre", origin.split(".")[1]);
-  }else{
-    console.log('fail')
-  }
+  domain = origin.replace("https://kavre", origin.split(".")[1]);
+} else {
+  console.log('fail')
+}
 console.log(domain)
 
 function getCalendarData(year, month, callback) {
   $.ajax({
-    url: `${domain}/dashboard/getMonthCalendarApi${
-      year && month ? `?year=${year}&month=${month}` : ""
-    }`,
+    url: `${domain}/dashboard/getMonthCalendarApi${year && month ? `?year=${year}&month=${month}` : ""
+      }`,
     type: "GET",
     success: function (response) {
-      callback(response);
+      callback && callback(response);
+      localStorage.setItem('calendarData', JSON.stringify(response));
     },
     error: function (error) {
       console.log(error);
     },
   });
 }
+getCalendarData();
 function removeCalendar() {
   $(".calendar").remove();
 }
-function generateCalendar(response) {
-  const current = $("#calendar-nepali");
+function generateCalendar(response, current) {
   const dateResponse = response;
   const date = dateResponse.monthdata;
-
   removeCalendar();
   //add active class to the input field
   $(current).addClass("active");
   const today_date = new Date();
 
-  const selected_nepali_date = current.val()?.split("/").pop();
-  const selected_nepali_month = current.val()?.split("/")[1];
+  const selected_nepali_date = current.val?.split("/").pop();
+  const selected_nepali_month = current.val?.split("/")[1];
 
   const today = selected_nepali_date
     ? date.find((each) => each.gate == selected_nepali_date)?.englishDate
     : today_date.getDate();
   const current_month = selected_nepali_month
     ? Number(
-        date.find((each) => each.nepaliMonth == selected_nepali_month)
-          ?.englishMonth
-      ) + 1
+      date.find((each) => each.nepaliMonth == selected_nepali_month)
+        ?.englishMonth
+    ) + 1
     : today_date.getMonth() + 1;
 
   //create the body of the calendar
-  function createBody() {
+  function createBody(current) {
     var calendarBody = $("<div class='calendar-body'></div>").appendTo(
       container
     );
-    var selectedDate = $("#calendar-nepali").val();
+    var selectedDate = $(".calendar-nepali").val();
     $.each(date, function (index, item) {
       // var isActive =
       //   today == item.englishDate && selected_nepali_month == item.nepaliMonth;
@@ -85,8 +84,7 @@ function generateCalendar(response) {
         item.gate.toString();
       var isActive = selectedDate === itemDate;
       var calendarItem = $(
-        `<div id='${item.dayid}' class="${item.active ? "" : "disabled"} ${
-          isActive ? "active" : ""
+        `<div id='${item.dayid}' class="${item.active ? "" : "disabled"} ${isActive ? "active" : ""
         }"}  style="color: ${item?.eventColour};"></div>`
       )
         .addClass("calendar-item")
@@ -99,19 +97,15 @@ function generateCalendar(response) {
         $(this).siblings().removeClass("active");
         //get the value of the clicked item
         var value = $(this).text();
-        //set the value of the input field
-        $("#calendar-nepali").val(
-          `${dateResponse.curYear}/${dateResponse.curMonth}/${value}`
-        );
-        //remove the element which are hidden if any
-        $(current).parent().find("input[type='hidden']").remove();
-        //add a data-id attribute to current element to store the value of the clicked item
-        $(current).attr("data-id", this.id);
 
-          //remove the calendar container
-          removeCalendar(); 
-          //trigger the change event handler in the input field
-          $("#calendar-nepali").trigger("change");
+        //add a data-id attribute and value to current element to store the value of the clicked item
+        $(current).attr("data-id", this.id);
+        $(current).attr("value", `${dateResponse.curYear}/${dateResponse.curMonth}/${value}`);
+
+        //remove the calendar container
+        removeCalendar();
+        //trigger the change event handler in the input field
+        $(".calendar-nepali").trigger("change");
       });
     });
   }
@@ -125,8 +119,7 @@ function generateCalendar(response) {
   // create and show a container just below the input field
   $(
     `<div class='calendar-header'><div class='action-button' id='previous'>&laquo;</div>
-    <div class="date-title">${
-      dateResponse.curYear + " " + activeMonth
+    <div class="date-title">${dateResponse.curYear + " " + activeMonth
     }</div><div class='action-button' id='next'>&raquo;</div></div></div>`
   ).appendTo(wrapper);
   $(
@@ -141,7 +134,7 @@ function generateCalendar(response) {
     getCalendarData(
       dateResponse.prevYear,
       dateResponse.prevMonth,
-      generateCalendar
+      (response)=>generateCalendar(response,current),
     );
   });
 
@@ -149,38 +142,43 @@ function generateCalendar(response) {
     getCalendarData(
       dateResponse.nextYear,
       dateResponse.nextMonth,
-      generateCalendar
+     (response)=> generateCalendar(response,current),
     );
   });
 
-  createBody(activeMonth);
+  createBody(current);
   //trigger onchange event handler in the input field
 
   //console on change
-  $("#calendar-nepali").on("change", function () {
+  $(".calendar-nepali").on("change", function () {
     console.log("changed triggered");
   });
 }
-getCalendarData(null, null, createCalendar);
-
-function createCalendar(response) {
-  $("#calendar-nepali").on("focus", function () {
-    const selected_nepali_year = $(this).val()?.split("/")[0];
-    const selected_nepali_month = $(this).val()?.split("/")[1];
-    if (selected_nepali_month && selected_nepali_year) {
-      return getCalendarData(
-        selected_nepali_year,
-        selected_nepali_month,
-        generateCalendar
-      );
-    }
-    generateCalendar(response);
-  });
+$(".calendar-nepali").on("focus", function () {
+  if (!localStorage.getItem('calendarData')) {
+    getCalendarData(null, null, (response) => createCalendar(response, this));
+  } else {
+    createCalendar(JSON.parse(localStorage.getItem('calendarData')), this);
+  }
+});
+function createCalendar(response, that) {
+  const current = that
+  const selected_nepali_year = $(current).val()?.split("/")[0];
+  const selected_nepali_month = $(current).val()?.split("/")[1];
+  debugger
+  if (selected_nepali_month && selected_nepali_year) {
+    return getCalendarData(
+      selected_nepali_year,
+      selected_nepali_month,
+      (response) => generateCalendar(response, current)
+    );
+  }
+  generateCalendar(response, current);
 }
 
 //call a function in document ready
 $(document).ready(function () {
-  var current = $("#calendar-nepali");
+  var current = $(".calendar-nepali");
   $(current).wrap('<div class="nepali-calendar"></div>');
   // add a suffix icon to the input field
 

@@ -21,7 +21,7 @@
   transition: 0.5s;
 }
 
-#calendar-nepali {
+.calendar-nepali {
   padding: 10px;
   position: relative;
   width: 100%;
@@ -33,7 +33,7 @@
   padding: 12px;
 }
 
-#calendar-nepali:focus {
+.calendar-nepali:focus {
   box-shadow: 0 0 1px 0 #29abe2;
   outline: unset;
   border: 1px solid #29abe2;
@@ -74,6 +74,8 @@
   margin-top: 4px;
   position: absolute;
   right: 0;
+  z-index: 1;
+
 }
 .calendar-header {
   display: flex;
