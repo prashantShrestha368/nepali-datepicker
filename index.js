@@ -91,14 +91,9 @@ function generateCalendar(response) {
         );
         //remove the element which are hidden if any
         $(current).parent().find("input[type='hidden']").remove();
-        //add a hidden field nepali-calendar to store the value of the clicked item
-        $("<input>")
-          .attr({
-            id:'calendar-day-id',
-            type: "hidden",
-            value: `${this.id}`,
-          })
-          .appendTo($(current).parent());
+        //add a data-id attribute to current element to store the value of the clicked item
+        $(current).attr("data-id", this.id);
+
           //remove the calendar container
           removeCalendar();
           //trigger the change event handler in the input field
