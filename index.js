@@ -89,9 +89,20 @@ function generateCalendar(response) {
         $("#calendar-nepali").val(
           `${dateResponse.curYear}/${dateResponse.curMonth}/${value}`
         );
-
-        //remove the calendar container
-        removeCalendar();
+        //remove the element which are hidden if any
+        $(current).parent().find("input[type='hidden']").remove();
+        //add a hidden field nepali-calendar to store the value of the clicked item
+        $("<input>")
+          .attr({
+            id:'calendar-day-id',
+            type: "hidden",
+            value: `${this.id}`,
+          })
+          .appendTo($(current).parent());
+          //remove the calendar container
+          removeCalendar();
+          //trigger the change event handler in the input field
+          $("#calendar-nepali").trigger("change");
       });
     });
   }
@@ -135,11 +146,10 @@ function generateCalendar(response) {
 
   createBody(activeMonth);
   //trigger onchange event handler in the input field
-  $("#calendar-nepali").trigger("change");
 
   //console on change
   $("#calendar-nepali").on("change", function () {
-    console.log("changed");
+    console.log("changed triggered");
   });
 }
 getCalendarData(null, null, createCalendar);

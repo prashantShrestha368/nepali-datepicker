@@ -3,11 +3,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <body>
 
-        <input id="calendar-nepali">
+        <input onchange="showId(this)" id="calendar-nepali">
     </body>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="index.js"></script>
     <!-- <script src="https://nepali-calendar-axios.pages.dev/index.js"></script>
     <script src="https://nepali-calendar-axios.pages.dev/index.css"></script> -->
     <link rel="stylesheet" href="index.css">
+
+    <script>
+        function showId(e){
+            console.log(e.nextSibling.value);
+        }
+    </script>
 </html>
