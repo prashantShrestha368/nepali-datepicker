@@ -12,11 +12,25 @@ const dateConfig = {
   11: "फागुन",
   12: "चैत",
 };
+ let domain = "https://kavre.nivid.app";
+
+const origin = location.origin;
+const liveUrlPattern =
+  /^(https:\/\/[a-zA-Z0-9.-]+\.nivid\.app)$/;
+
+  if (liveUrlPattern.test(origin)) {
+    console.log('pass',origin.split(".")[1])
+    //slice out demo79 from the origin
+
+    domain = origin.replace("https://kavre", origin.split(".")[1]);
+  }else{
+    console.log('fail')
+  }
+console.log(domain)
 
 function getCalendarData(year, month, callback) {
-  var url = window.location.origin.split("/")[2] || "kavre.nivid.app";
   $.ajax({
-    url: `https://${url}/dashboard/getMonthCalendarApi${
+    url: `${domain}/dashboard/getMonthCalendarApi${
       year && month ? `?year=${year}&month=${month}` : ""
     }`,
     type: "GET",
@@ -95,7 +109,7 @@ function generateCalendar(response) {
         $(current).attr("data-id", this.id);
 
           //remove the calendar container
-          removeCalendar();
+          removeCalendar(); 
           //trigger the change event handler in the input field
           $("#calendar-nepali").trigger("change");
       });
