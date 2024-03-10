@@ -72,6 +72,8 @@
   flex-direction: column;
   background: #fff;
   margin-top: 4px;
+  position: absolute;
+  right: 0;
 }
 .calendar-header {
   display: flex;
