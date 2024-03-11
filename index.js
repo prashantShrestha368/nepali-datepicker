@@ -101,11 +101,11 @@ function generateCalendar(response, current) {
         //add a data-id attribute and value to current element to store the value of the clicked item
         $(current).attr("data-id", this.id);
         $(current).attr("value", `${dateResponse.curYear}/${dateResponse.curMonth}/${value}`);
+        //trigger the change event handler in the input field
+        $(current).trigger("change");
 
         //remove the calendar container
         removeCalendar();
-        //trigger the change event handler in the input field
-        $(".calendar-nepali").trigger("change");
       });
     });
   }
@@ -148,6 +148,8 @@ function generateCalendar(response, current) {
 
   createBody(current);
   //trigger onchange event handler in the input field
+  
+
 
   //console on change
   $(".calendar-nepali").on("change", function () {
@@ -165,7 +167,6 @@ function createCalendar(response, that) {
   const current = that
   const selected_nepali_year = $(current).val()?.split("/")[0];
   const selected_nepali_month = $(current).val()?.split("/")[1];
-  debugger
   if (selected_nepali_month != response.curMonth || selected_nepali_year != response.curYear) {
     return getCalendarData(
       selected_nepali_year,
